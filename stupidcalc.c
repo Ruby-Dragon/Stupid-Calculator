@@ -2,6 +2,17 @@
 #include "math.h"
 #include "stdlib.h"
 
+double stupidMult(double op1, double op2)
+{
+  double accum = op1;
+  for (int i = op2 -1; i>0;i--)
+  {
+    accum += op1;
+  }
+  return accum;
+}
+
+
 int main(int argc, char *argv[])
 {
   if (argc != 4)
@@ -10,32 +21,10 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  float op1 = atof(argv[1]);
+  double op1 = atof(argv[1]);
   char operator = argv[2][0];
-  float op2 = atof(argv[3]);
-
-  /*
-  printf("Enter the first operand: ");
-
-  float op1 = 0.0f;
-  char in[60];
-  scanf("%s", in);
-  op1 = atof(in);
-
-  printf("\nEnter the operator: ");
-
-  char operator = '+';
-  scanf("%s",in);
-  operator = in[0];
-
-  printf("\nEnter the second operand: ");
-
-  float op2 = 0.0f;
-  scanf("%s", in);
-  op2 = atof(in);
-  */
-
-  float out = 0.0f;
+  double op2 = atof(argv[3]);
+  double out = 0.0f;
 
   char possibleOps[] = {0x2B, 0x2D, 0x2A, 0x2F, 0x5E};
 
@@ -58,7 +47,7 @@ int main(int argc, char *argv[])
           out = op1/op2;
           break;
         case 2:
-          out = op1 * op2;
+          out = stupidMult(op1, op2);
           break;
         case 1:
           out = op1 - op2;
@@ -70,7 +59,16 @@ int main(int argc, char *argv[])
     }
   }
 
-  printf("%f\n", out);
+  if (-9223372036854775808.0 <= out && out < 9223372036854775808.0) {
+    if( out == (double)((long long)(out)))
+    {
+      printf("%lli\n", (long long)out);
+    }
+    else
+    {
+      printf("%lf\n", out);
+    }
+  }
 
   return 0;
 }
