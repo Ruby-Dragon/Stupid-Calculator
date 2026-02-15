@@ -1,6 +1,13 @@
 #include "stdio.h"
 #include "math.h"
 #include "stdlib.h"
+#include "stdbool.h"
+
+bool isInt(double num)
+{
+  return num == (double)((long long)(num));
+}
+
 
 double stupidMult(double op1, double op2)
 {
@@ -12,6 +19,60 @@ double stupidMult(double op1, double op2)
   return accum;
 }
 
+double fastInvSqrt(double number)
+{
+  long long i;
+  double x2, y;
+  const float threeHalfs = 1.5f;
+
+  x2 = number * 0.5f;
+  y = number;
+  i = *(long long *) &y;
+  i = 0x5fe6ec85e7de30da - ( i >> 1 );
+  y = * (double *) &i;
+  y = y * (threeHalfs - (x2 * y * y));
+  y = y * (threeHalfs - (x2 * y * y));
+  
+  return y;
+}
+
+double stupidPow(double op1, double op2)
+{
+  double result = op1;
+
+ 
+  for (int i = op2 -1; i > 0; i--)
+  {
+    if (isInt(result))
+    {
+      result = stupidMult(result, op1);
+    }
+    else
+    {
+      result = result * op1;
+    }
+  }
+  return result;
+}
+
+double stupidDiv(double op1, double op2)
+{
+  double reciprocal = pow(fastInvSqrt(op2), 2.0f);
+  
+  return reciprocal * op1;
+}
+
+void printNum(double num)
+{
+  if (isInt(num))
+  {
+    printf("%lli\n", (long long)num);
+  }
+  else
+  {
+    printf("%lf\n", num);
+  }
+}
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +88,7 @@ int main(int argc, char *argv[])
   double out = 0.0f;
 
   char possibleOps[] = {0x2B, 0x2D, 0x2A, 0x2F, 0x5E};
+  void *opLabels[] = {&&add, &&sub, &&mult, &&div, &&pow};
 
   for (int i = sizeof(possibleOps)-1; i >= 0; i--)
   {
@@ -38,37 +100,43 @@ int main(int argc, char *argv[])
 
     if ((operator ^ possibleOps[i]) == 0x00)
     {
-      switch(i)
-      {
-        case 4:
-          out = pow(op1, op2);
-          break;
-        case 3:
-          out = op1/op2;
-          break;
-        case 2:
-          out = stupidMult(op1, op2);
-          break;
-        case 1:
-          out = op1 - op2;
-          break;
-        case 0:
-          out = op1 + op2;
-          break;
-      }
+      goto *opLabels[i];
     }
   }
 
-  if (-9223372036854775808.0 <= out && out < 9223372036854775808.0) {
-    if( out == (double)((long long)(out)))
-    {
-      printf("%lli\n", (long long)out);
-    }
-    else
-    {
-      printf("%lf\n", out);
-    }
+add:
+  out = op1 + op2;
+  goto print;
+sub:
+  out = op1 - op2;
+  goto print;
+mult:
+  if (isInt(op2))
+  {
+    out = stupidMult(op1, op2);
   }
+  else
+  {
+    out = op1 * op2;
+  }
+  goto print;
+div:
+  out = stupidDiv(op1, op2);
+  goto print;
+pow:
+  if (isInt(op2))
+  {
+    out = stupidPow(op1, op2);
+  }
+  else
+  {
+    out = pow(op1, op2);
+  }
+  goto print;
+
+print:
+
+  printNum(out);
 
   return 0;
 }
