@@ -94,8 +94,7 @@ int main(int argc, char *argv[])
   {
     if (i <= -1)
     {
-      printf("what on god's green earth did you type in?\n");
-      break;
+      goto error;
     }
 
     if ((operator ^ possibleOps[i]) == 0x00)
@@ -103,6 +102,10 @@ int main(int argc, char *argv[])
       goto *opLabels[i];
     }
   }
+
+error:
+  printf("what on god's green earth did you type in?\n");
+  return 1;
 
 add:
   out = op1 + op2;
