@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
   double op2 = atof(argv[3]);
   double out = 0.0f;
 
-  char possibleOps[] = {0x2B, 0x2D, 0x2A, 0x2F, 0x5E};
+  char possibleOps[] = {0x2B, 0x2D, 0x78, 0x2F, 0x5E};
   void *opLabels[] = {&&add, &&sub, &&mult, &&div, &&pow};
 
   for (int i = sizeof(possibleOps)-1; i >= 0; i--)
