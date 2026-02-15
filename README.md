@@ -1,4 +1,4 @@
-#stupid calculator
+# stupid calculator
 
 "he's not just a regular moron. He's the product of the greatest minds of a generation working together with the express purpose of building the *dumbest* moron who ever lived. And *you* just put him in charge of the entire facility" - GLaDOS, Portal 2
 
