@@ -69,7 +69,7 @@ double stupidAdd(double op1, double op2)
 
   double accum = op1;
 
-  for (long long i = abs((long long) whole); i > 0; i--)
+  for (long long i = llabs((long long) whole); i > 0; i--)
   {
     if (whole > 0)
       accum++;
