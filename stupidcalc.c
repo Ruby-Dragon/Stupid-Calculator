@@ -62,6 +62,20 @@ double stupidDiv(double op1, double op2)
   return reciprocal * op1;
 }
 
+double stupidSub(double op1, double op2)
+{
+  long long i;
+  double y = op2;
+
+  i = *(long long *) &y;
+
+  i = i ^ 0x8000000000000000; //i might be cooking
+
+  y = *(double *) &i;
+
+  return y + op1;
+}
+
 void printNum(double num)
 {
   if (isInt(num))
@@ -111,7 +125,7 @@ add:
   out = op1 + op2;
   goto print;
 sub:
-  out = op1 - op2;
+  out = stupidSub(op1, op2);
   goto print;
 mult:
   if (isInt(op2))
