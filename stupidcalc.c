@@ -62,6 +62,25 @@ double stupidDiv(double op1, double op2)
   return reciprocal * op1;
 }
 
+double stupidAdd(double op1, double op2)
+{
+  double whole = 0.0f;
+  double frac = modf(op2, &whole);
+
+  double accum = op1;
+
+  for (long long i = abs((long long) whole); i > 0; i--)
+  {
+    if (whole > 0)
+      accum++;
+    else
+      accum--;
+  }
+
+  accum += frac;
+  return accum;
+}
+
 double stupidSub(double op1, double op2)
 {
   long long i;
@@ -73,7 +92,7 @@ double stupidSub(double op1, double op2)
 
   y = *(double *) &i;
 
-  return y + op1;
+  return stupidAdd(op1, y);
 }
 
 void printNum(double num)
@@ -122,7 +141,7 @@ error:
   return 1;
 
 add:
-  out = op1 + op2;
+  out = stupidAdd(op1, op2);
   goto print;
 sub:
   out = stupidSub(op1, op2);
