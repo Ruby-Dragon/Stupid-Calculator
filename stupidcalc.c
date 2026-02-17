@@ -8,13 +8,31 @@ bool isInt(double num)
   return num == (double)((long long)(num));
 }
 
+double stupidAdd(double op1, double op2)
+{
+  double whole = 0.0f;
+  double frac = modf(op2, &whole);
+
+  double accum = op1;
+
+  for (long long i = llabs((long long) whole); i > 0; i--)
+  {
+    if ((*(long long *) &whole) >> 63)
+      accum--;
+    else
+      accum++;
+  }
+
+  accum += frac;
+  return accum;
+}
 
 double stupidMult(double op1, double op2)
 {
   double accum = op1;
   for (int i = op2 -1; i>0;i--)
   {
-    accum += op1;
+    accum = stupidAdd(accum, op1);
   }
   return accum;
 }
@@ -60,25 +78,6 @@ double stupidDiv(double op1, double op2)
   double reciprocal = pow(fastInvSqrt(op2), 2.0f);
   
   return reciprocal * op1;
-}
-
-double stupidAdd(double op1, double op2)
-{
-  double whole = 0.0f;
-  double frac = modf(op2, &whole);
-
-  double accum = op1;
-
-  for (long long i = llabs((long long) whole); i > 0; i--)
-  {
-    if (whole > 0)
-      accum++;
-    else
-      accum--;
-  }
-
-  accum += frac;
-  return accum;
 }
 
 double stupidSub(double op1, double op2)
