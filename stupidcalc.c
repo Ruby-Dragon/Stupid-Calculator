@@ -3,6 +3,10 @@
 #include "stdlib.h"
 #include "stdbool.h"
 
+double out = 0.0f;
+double op1 = 0.0f;
+double op2 = 0.0f;
+
 bool isInt(double num)
 {
   return num == (double)((long long)(num));
@@ -54,7 +58,7 @@ double fastInvSqrt(double number)
   return y;
 }
 
-double stupidPow(double op1, double op2)
+void stupidPow()
 {
   double result = op1;
 
@@ -70,17 +74,17 @@ double stupidPow(double op1, double op2)
       result = result * op1;
     }
   }
-  return result;
+  out = result;
 }
 
-double stupidDiv(double op1, double op2)
+void stupidDiv()
 {
   double reciprocal = pow(fastInvSqrt(op2), 2.0f);
   
-  return reciprocal * op1;
+  out =  reciprocal * op1;
 }
 
-double stupidSub(double op1, double op2)
+void stupidSub()
 {
   long long i;
   double y = op2;
@@ -91,7 +95,7 @@ double stupidSub(double op1, double op2)
 
   y = *(double *) &i;
 
-  return stupidAdd(op1, y);
+  out = stupidAdd(op1, y);
 }
 
 void printNum(double num)
@@ -114,10 +118,9 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  double op1 = atof(argv[1]);
+  op1 = atof(argv[1]);
   char operator = argv[2][0];
-  double op2 = atof(argv[3]);
-  double out = 0.0f;
+  op2 = atof(argv[3]);
 
   char possibleOps[] = {0x2B, 0x2D, 0x78, 0x2F, 0x5E};
   void *opLabels[] = {&&add, &&sub, &&mult, &&div, &&pow};
@@ -143,7 +146,7 @@ add:
   out = stupidAdd(op1, op2);
   goto print;
 sub:
-  out = stupidSub(op1, op2);
+  stupidSub();
   goto print;
 mult:
   if (isInt(op2))
@@ -156,12 +159,12 @@ mult:
   }
   goto print;
 div:
-  out = stupidDiv(op1, op2);
+  stupidDiv();
   goto print;
 pow:
   if (isInt(op2))
   {
-    out = stupidPow(op1, op2);
+    stupidPow();
   }
   else
   {
