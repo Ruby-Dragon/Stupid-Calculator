@@ -33,12 +33,15 @@ double stupidAdd(double op1, double op2)
 
 double stupidMult(double op1, double op2)
 {
+  double whole = 0.0f;
+  double frac = modf(op2, &whole);
+
   double accum = op1;
-  for (long long i = ((long long) op2) -1ll; i>0;i--)
+  for (long long i = llabs((long long) whole) -1ll; i>0;i--)
   {
     accum = stupidAdd(accum, op1);
   }
-  return accum;
+  return stupidAdd(accum, op1 * frac);
 }
 
 double fastInvSqrt(double number)
@@ -149,14 +152,7 @@ sub:
   stupidSub();
   goto print;
 mult:
-  if (isInt(op2))
-  {
-    out = stupidMult(op1, op2);
-  }
-  else
-  {
-    out = op1 * op2;
-  }
+  out = stupidMult(op1, op2);
   goto print;
 div:
   stupidDiv();
