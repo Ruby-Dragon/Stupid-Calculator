@@ -34,7 +34,7 @@ double stupidAdd(double op1, double op2)
 double stupidMult(double op1, double op2)
 {
   double accum = op1;
-  for (int i = op2 -1; i>0;i--)
+  for (long long i = ((long long) op2) -1ll; i>0;i--)
   {
     accum = stupidAdd(accum, op1);
   }
@@ -45,7 +45,7 @@ double fastInvSqrt(double number)
 {
   long long i;
   double x2, y;
-  const float threeHalfs = 1.5f;
+  const double threeHalfs = 1.5f;
 
   x2 = number * 0.5f;
   y = number;
